@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreamento de Pedidos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        <h1>Rastreamento de Pedidos</h1>
+        <form id="rastreamentoForm">
+            <div class="input-group">
+                <label for="numeroPedido">Número do Pedido:</label>
+                <input type="text" id="numeroPedido" name="numeroPedido" placeholder="Digite o número do pedido" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" name="cep" placeholder="Ex: 01001-000" maxlength="9" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="logradouro">Rua:</label>
+                <input type="text" id="logradouro" name="logradouro" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label for="bairro">Bairro:</label>
+                <input type="text" id="bairro" name="bairro" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label for="localidade">Cidade:</label>
+                <input type="text" id="localidade" name="localidade" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label for="uf">Estado (UF):</label>
+                <input type="text" id="uf" name="uf" maxlength="2" readonly>
+            </div>
+            
+            <button type="submit">Rastrear Pedido</button>
+        </form>
+
+        <div id="resultado" class="resultado">
+            </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
