@@ -42,10 +42,35 @@
             </div>
             
             <button type="submit">Rastrear Pedido</button>
+            <button type="button" id="limparFormulario1">Limpar Formulário</button>
+
         </form>
 
         <div id="resultado" class="resultado">
             </div>
+         
+        <hr> <h2>Buscar CEP</h2>
+        <form id="buscaCepForm">
+            <div class="input-group">
+                <label for="ufBusca">Estado (UF):</label>
+                <input type="text" id="ufBusca" name="ufBusca" maxlength="2" required>
+            </div>
+            <div class="input-group">
+                <label for="cidadeBusca">Cidade:</label>
+                <input type="text" id="cidadeBusca" name="cidadeBusca" required>
+            </div>
+            <div class="input-group">
+                <label for="logradouroBusca">Rua:</label>
+                <input type="text" id="logradouroBusca" name="logradouroBusca" required>
+            </div>
+            <button type="submit">Buscar CEP</button>
+        </form>
+
+        <div id="listaCeps" class="resultado" style="display: none;">
+            </div>
+
+        <button id="btnLimpar" class="btn-limpar">Limpar Formulário</button>    
+            
     </main>
 
     <script src="script.js"></script>

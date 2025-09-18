@@ -6,7 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const localidadeInput = document.getElementById('localidade');
     const ufInput = document.getElementById('uf');
     const resultadoDiv = document.getElementById('resultado');
+    const buscaCepForm = document.getElementById('buscaCepForm');
+    const ufBuscaInput = document.getElementById('ufBusca');
+    const cidadeBuscaInput = document.getElementById('cidadeBusca');
+    const logradouroBuscaInput = document.getElementById('logradouroBusca');
+    const listaCepsDiv = document.getElementById('listaCeps');
+    const btnLimpar = document.getElementById('btnLimpar');
+    const limparFormulario1 = document.getElementById('limparFormulario1');
 
+    
     // Função para limpar os campos de endereço
     const limparCamposEndereco = () => {
         logradouroInput.value = '';
@@ -15,6 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ufInput.value = '';
         resultadoDiv.textContent = "";
     };
+
+    // NOVA FUNÇÃO: Limpar o primeiro formulário
+    const limparPrimeiroFormulario = () => {
+        document.getElementById('numeroPedido').value = '';
+        document.getElementById('cep').value = '';
+        limparCamposEndereco();
+    };
+
+    // Adiciona um evento de clique ao novo botão
+    limparFormulario1.addEventListener('click', () => {
+        limparPrimeiroFormulario();
+    });
 
     // Função assíncrona para buscar o CEP na sua API de backend
     const buscarCep = async (cep) => {
@@ -53,6 +73,57 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Erro ao buscar CEP:", error);
         }
     };
+     // Adiciona evento de "submit" para o formulário de busca de CEP
+    buscaCepForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const uf = ufBuscaInput.value;
+        const cidade = cidadeBuscaInput.value;
+        const logradouro = logradouroBuscaInput.value;
+
+        listaCepsDiv.textContent = "Buscando CEPs...";
+        listaCepsDiv.style.display = 'block';
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/cep/${uf}/${cidade}/${logradouro}`);
+
+            if (response.ok) {
+                const cepsEncontrados = await response.json();
+
+                if (cepsEncontrados.length > 0) {
+                    listaCepsDiv.innerHTML = '<h3>CEPs Encontrados:</h3>';
+                    cepsEncontrados.forEach(item => {
+                        const p = document.createElement('p');
+                        p.textContent = `${item.cep} - ${item.logradouro}, ${item.bairro}`;
+                        listaCepsDiv.appendChild(p);
+                    });
+                } else {
+                    listaCepsDiv.textContent = "Nenhum CEP encontrado para este endereço.";
+                }
+            } else {
+                listaCepsDiv.textContent = "Erro na busca. Verifique os dados e tente novamente.";
+            }
+        } catch (error) {
+            listaCepsDiv.textContent = "Erro na conexão. Tente novamente mais tarde.";
+            console.error("Erro ao buscar CEPs por endereço:", error);
+        }
+    });
+
+    // Adiciona evento de "click" para o botão de limpar
+    btnLimpar.addEventListener('click', () => {
+        // Limpa os campos do primeiro formulário
+        document.getElementById('numeroPedido').value = '';
+        document.getElementById('cep').value = '';
+        limparCamposEndereco();
+
+        // Limpa os campos do segundo formulário
+        ufBuscaInput.value = '';
+        cidadeBuscaInput.value = '';
+        logradouroBuscaInput.value = '';
+
+        // Esconde os resultados da busca
+        listaCepsDiv.style.display = 'none';
+    });
 
     // Adiciona um evento de "keyup" para o campo CEP
     // A cada tecla digitada, verifica se o CEP está completo e chama a função de busca
@@ -71,4 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
             buscarCep(cep);
         }
     });
+
+
+
+
 });

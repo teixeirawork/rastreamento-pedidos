@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
+
 
 @RestController // Indica que a classe é um controlador REST
 @RequestMapping("/api/cep") // Define o caminho base para todos os endpoints
@@ -35,4 +38,24 @@ public class CepController {
 
         return ResponseEntity.notFound().build(); // Retorna status 404 se o CEP não for encontrado
     }
+
+     @GetMapping("/{uf}/{localidade}/{logradouro}")
+    public ResponseEntity<List<Endereco>> buscarCeps(@PathVariable String uf, 
+                                                     @PathVariable String localidade, 
+                                                     @PathVariable String logradouro) {
+
+        // Substitua espaços por '+' para a URL da ViaCEP
+        String localidadeTratada = localidade.replace(" ", "+");
+        String logradouroTratado = logradouro.replace(" ", "+");
+
+        List<Endereco> cepsEncontrados = cepService.buscarCepsPorEndereco(uf, localidadeTratada, logradouroTratado);
+
+        if (cepsEncontrados != null && !cepsEncontrados.isEmpty()) {
+            return ResponseEntity.ok(cepsEncontrados);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+
 }
